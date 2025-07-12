@@ -46,12 +46,6 @@ const AskQuestion: React.FC = () => {
   return (
     <div className={styles.pageWrap}>
       <h1 className={styles.heading}>Ask a Question</h1>
-      <p className={styles.subtitle}>
-        Share your knowledge and get help from the community.
-        <br />
-        Whether you're stuck on a problem or want to learn something new, we're
-        here to help.
-      </p>
       <div className={styles.container}>
         <div className={styles.card}>
           <form className={styles.form} onSubmit={handleSubmit}>

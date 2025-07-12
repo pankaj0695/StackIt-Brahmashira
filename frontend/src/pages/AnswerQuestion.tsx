@@ -11,8 +11,8 @@ const quillModules = {
     [{ list: "ordered" }, { list: "bullet" }],
     ["blockquote", "code-block"],
     ["link", "image"],
-    ["clean"]
-  ]
+    ["clean"],
+  ],
 };
 
 type Answer = {
@@ -35,7 +35,11 @@ type Props = {
   questions: Question[];
   onLikeQuestion: (questionId: number) => void;
   onAddAnswer: (questionId: number, answer: string) => void;
-  onVoteAnswer: (questionId: number, answerId: number, type: "up" | "down") => void;
+  onVoteAnswer: (
+    questionId: number,
+    answerId: number,
+    type: "up" | "down"
+  ) => void;
 };
 
 const AnswerQuestion: React.FC<Props> = ({
@@ -44,14 +48,16 @@ const AnswerQuestion: React.FC<Props> = ({
   onAddAnswer,
   onVoteAnswer,
 }) => {
-  const [answerInputs, setAnswerInputs] = useState<{ [key: number]: string }>({});
+  const [answerInputs, setAnswerInputs] = useState<{ [key: number]: string }>(
+    {}
+  );
 
   const handleInputChange = (questionId: number, value: string) => {
     setAnswerInputs((prev) => ({ ...prev, [questionId]: value }));
   };
 
   const handleAddAnswer = (questionId: number) => {
-    if (answerInputs[questionId]?.replace(/<(.|\n)*?>/g, '').trim()) {
+    if (answerInputs[questionId]?.replace(/<(.|\n)*?>/g, "").trim()) {
       onAddAnswer(questionId, answerInputs[questionId]);
       setAnswerInputs((prev) => ({ ...prev, [questionId]: "" }));
     }
@@ -61,7 +67,8 @@ const AnswerQuestion: React.FC<Props> = ({
     <div className={styles.pageContainer}>
       <h1 className={styles.heading}>Welcome to the pool of Creativity</h1>
       <p className={styles.subheading}>
-        Answer the questions related to your domain and help each other build a community
+        Answer the questions related to your domain and help each other build a
+        community
       </p>
       <div className={styles.cardGrid}>
         {questions.map((q) => (
@@ -74,7 +81,15 @@ const AnswerQuestion: React.FC<Props> = ({
                 aria-label="Like Question"
                 title="Like this question"
               >
-                <span style={{ color: "#e25555", fontSize: "1.3em", marginRight: 4 }}>❤️</span>
+                <span
+                  style={{
+                    color: "#e25555",
+                    fontSize: "1.3em",
+                    marginRight: 4,
+                  }}
+                >
+                  ❤️
+                </span>
                 {q.likes}
               </button>
             </div>
@@ -98,7 +113,9 @@ const AnswerQuestion: React.FC<Props> = ({
               <button
                 className={styles.submitAnswerBtn}
                 onClick={() => handleAddAnswer(q.id)}
-                disabled={!answerInputs[q.id]?.replace(/<(.|\n)*?>/g, '').trim()}
+                disabled={
+                  !answerInputs[q.id]?.replace(/<(.|\n)*?>/g, "").trim()
+                }
               >
                 Submit Answer
               </button>
@@ -107,9 +124,7 @@ const AnswerQuestion: React.FC<Props> = ({
               {q.answers.map((ans) => (
                 <div className={styles.answerCard} key={ans.id}>
                   {/* Render HTML safely */}
-                  <span
-                    dangerouslySetInnerHTML={{ __html: ans.text }}
-                  />
+                  <span dangerouslySetInnerHTML={{ __html: ans.text }} />
                   <div className={styles.voteBtns}>
                     <button
                       onClick={() => onVoteAnswer(q.id, ans.id, "up")}

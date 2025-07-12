@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { dummyQuestions } from "./DummyQuests";
 
 const QUESTIONS_PER_PAGE = 5;
@@ -10,6 +11,7 @@ const MainContent: React.FC<{
 }> = ({ page, setPage, onAskQuestion }) => {
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState<"all" | "new">("all");
+  const navigate = useNavigate();
 
   // Filter and paginate questions
   const filtered = dummyQuestions.filter(
@@ -38,30 +40,29 @@ const MainContent: React.FC<{
           Newly Added
         </button>
         <input
-        type="text"
-        placeholder="Search questions, tags, or users..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{
-          width: "100%",
-          maxWidth: "600px",
-          margin: "0 auto 2rem",
-          position: "relative",
-          borderRadius: "999px",
-          boxShadow: "0 2px 8px rgba(99, 102, 241, 0.08)",
-          transition: "all 0.2s ease",
-          border: "1.5px solid #c7d2fe",
-          background: "#ffffff",
-          overflow: "hidden",
-          height: "50px",
-
-        }}
-      />
+          type="text"
+          placeholder="Search questions, tags, or users..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            width: "100%",
+            maxWidth: "600px",
+            margin: "0 auto 2rem",
+            position: "relative",
+            borderRadius: "999px",
+            boxShadow: "0 2px 8px rgba(99, 102, 241, 0.08)",
+            transition: "all 0.2s ease",
+            border: "1.5px solid #c7d2fe",
+            background: "#ffffff",
+            overflow: "hidden",
+            height: "50px",
+          }}
+        />
         <button className="ask-btn" onClick={onAskQuestion}>
           + Ask Question
         </button>
       </div>
-      
+
       <div style={{ width: "100%", maxWidth: 900, margin: "0 auto" }}>
         {paginated.length === 0 ? (
           <div
@@ -86,7 +87,10 @@ const MainContent: React.FC<{
                 marginBottom: 24,
                 border: "1.5px solid #e0e7ef",
                 textAlign: "left",
+                cursor: "pointer",
+                transition: "box-shadow 0.15s, border 0.15s",
               }}
+              onClick={() => navigate("/answer-question")}
             >
               <div
                 style={{

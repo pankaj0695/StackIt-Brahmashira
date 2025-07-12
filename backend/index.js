@@ -1,17 +1,19 @@
-// Backend
-
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
+dotenv.config();
+
 const app = express();
-require("dotenv").config();
 
 // Middleware
 app.use(cors());
+app.use(cookieParser());
 app.use(bodyParser.json());
 
-// Import routes (to be implemented in separate files)
+// Import routes
 const authRoutes = require("./routes/auth");
 const questionRoutes = require("./routes/questions");
 const answerRoutes = require("./routes/answers");
@@ -31,7 +33,7 @@ app.use("/report", reportRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/admin", adminRoutes);
 
-// Connect to MongoDB (update URI as needed)
+// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -40,10 +42,11 @@ mongoose.connect(process.env.MONGODB_URI, {
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => {
-  console.log("Connected to MongoDB");
+  console.log("✅ Connected to MongoDB");
 });
 
-const PORT = 4000;
+// Start server
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });

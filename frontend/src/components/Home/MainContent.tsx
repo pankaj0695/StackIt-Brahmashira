@@ -37,24 +37,31 @@ const MainContent: React.FC<{
         >
           Newly Added
         </button>
-        <button className="ask-btn" onClick={onAskQuestion}>
-          + Ask Question
-        </button>
-      </div>
-      <input
+        <input
         type="text"
         placeholder="Search questions, tags, or users..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         style={{
           width: "100%",
-          maxWidth: 420,
-          margin: "0 auto 2rem auto",
-          display: "block",
-          border: "1.5px solid #a5b4fc",
-          background: "#fff",
+          maxWidth: "600px",
+          margin: "0 auto 2rem",
+          position: "relative",
+          borderRadius: "999px",
+          boxShadow: "0 2px 8px rgba(99, 102, 241, 0.08)",
+          transition: "all 0.2s ease",
+          border: "1.5px solid #c7d2fe",
+          background: "#ffffff",
+          overflow: "hidden",
+          height: "50px",
+
         }}
       />
+        <button className="ask-btn" onClick={onAskQuestion}>
+          + Ask Question
+        </button>
+      </div>
+      
       <div style={{ width: "100%", maxWidth: 900, margin: "0 auto" }}>
         {paginated.length === 0 ? (
           <div

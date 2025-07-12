@@ -14,11 +14,7 @@ const Header: React.FC = () => {
         {user ? (
           <>
             <span className="user-name">Hello, {user.name}</span>
-            <button
-              className="logout-btn"
-              onClick={logout}
-              style={{ marginLeft: 12 }}
-            >
+            <button className="logout-btn" onClick={logout}>
               Logout
             </button>
           </>

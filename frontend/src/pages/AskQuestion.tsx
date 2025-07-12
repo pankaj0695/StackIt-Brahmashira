@@ -13,8 +13,8 @@ const quillModules = {
     [{ list: "ordered" }, { list: "bullet" }],
     ["blockquote", "code-block"],
     ["link", "image"],
-    ["clean"]
-  ]
+    ["clean"],
+  ],
 };
 
 const AskQuestion: React.FC = () => {
@@ -37,7 +37,6 @@ const AskQuestion: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission (e.g., send data to backend)
-    console.log({ title, details, tags });
     setTitle("");
     setDetails("");
     setTags([]);
@@ -48,8 +47,10 @@ const AskQuestion: React.FC = () => {
     <div className={styles.pageWrap}>
       <h1 className={styles.heading}>Ask a Question</h1>
       <p className={styles.subtitle}>
-        Share your knowledge and get help from the community.<br />
-        Whether you're stuck on a problem or want to learn something new, we're here to help.
+        Share your knowledge and get help from the community.
+        <br />
+        Whether you're stuck on a problem or want to learn something new, we're
+        here to help.
       </p>
       <div className={styles.container}>
         <div className={styles.card}>
@@ -63,84 +64,122 @@ const AskQuestion: React.FC = () => {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="What's your question? Be specific and imagine you're asking a friend"
+                placeholder="Be specific and imagine you’re asking another person"
                 required
+                style={{
+                  background: "#f8fafc",
+                  border: "1.5px solid #a5b4fc",
+                  borderRadius: 8,
+                }}
               />
-              <span className={styles.helper}>
-                Make your title clear and specific to help others understand your question
-              </span>
             </label>
             <label className={styles.label}>
-              Question Details
+              <span>
+                Details <span style={{ color: "#ef4444" }}>*</span>
+              </span>
               <ReactQuill
                 value={details}
                 onChange={setDetails}
-                placeholder="Describe your question in detail..."
-                className={styles.richTextEditor}
-                theme="snow"
                 modules={quillModules}
+                theme="snow"
+                style={{
+                  background: "#f8fafc",
+                  borderRadius: 8,
+                  marginBottom: 12,
+                }}
               />
             </label>
             <label className={styles.label}>
-              Tags
-              <span className={styles.helper}>
-                Add up to 5 tags to categorize your question
-              </span>
-              <div className={styles.tagsInputWrap}>
+              <span>Tags (up to 5)</span>
+              <div className={styles.tagInputWrap}>
                 <input
                   className={styles.input}
                   type="text"
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
-                  placeholder="Add tags (e.g., React, JWT)"
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
+                    if (e.key === "Enter" && tagInput.trim()) {
                       e.preventDefault();
                       addTag(tagInput.trim());
                     }
                   }}
+                  placeholder="Add a tag and press Enter"
+                  style={{
+                    background: "#f8fafc",
+                    border: "1.5px solid #a5b4fc",
+                    borderRadius: 8,
+                  }}
                 />
-                <div className={styles.tagsRow}>
-                  {tags.map((tag) => (
-                    <span className={styles.tagChip} key={tag}>
+                <div className={styles.suggestedTags}>
+                  {suggestedTags.map((tag) => (
+                    <span
+                      key={tag}
+                      className={styles.suggestedTag}
+                      onClick={() => addTag(tag)}
+                      style={{
+                        background:
+                          "linear-gradient(90deg, #a5b4fc 0%, #6366f1 100%)",
+                        color: "#fff",
+                        borderRadius: 6,
+                        padding: "2px 12px",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        marginRight: 6,
+                      }}
+                    >
                       {tag}
-                      <button
-                        type="button"
-                        className={styles.removeTag}
-                        onClick={() => removeTag(tag)}
-                        aria-label={`Remove ${tag}`}
-                      >
-                        ×
-                      </button>
                     </span>
                   ))}
                 </div>
               </div>
-              <div className={styles.helper} style={{ marginTop: "1rem" }}>
-                Suggested tags:
-              </div>
-              <div className={styles.suggestions}>
-                {suggestedTags.map((tag) => (
-                  <button
-                    type="button"
+              <div className={styles.tagsList}>
+                {tags.map((tag) => (
+                  <span
                     key={tag}
-                    className={styles.suggestion}
-                    disabled={tags.includes(tag) || tags.length >= 5}
-                    onClick={() => addTag(tag)}
+                    className={styles.tag}
+                    style={{
+                      background:
+                        "linear-gradient(90deg, #a5b4fc 0%, #6366f1 100%)",
+                      color: "#fff",
+                      borderRadius: 6,
+                      padding: "2px 12px",
+                      fontWeight: 600,
+                      marginRight: 6,
+                    }}
                   >
-                    + {tag}
-                  </button>
+                    {tag}
+                    <span
+                      className={styles.removeTag}
+                      onClick={() => removeTag(tag)}
+                      style={{
+                        marginLeft: 8,
+                        color: "#ef4444",
+                        cursor: "pointer",
+                        fontWeight: 700,
+                      }}
+                    >
+                      ×
+                    </span>
+                  </span>
                 ))}
               </div>
             </label>
-            <div className={styles.actions}>
-              <button type="button" className={styles.cancelBtn}>
-                Cancel
-              </button>
-              <button type="submit" className={styles.submitBtn}>
-                Submit Question
-              </button>
-            </div>
+            <button
+              type="submit"
+              className={styles.submitBtn}
+              style={{
+                background: "linear-gradient(90deg, #a5b4fc 0%, #6366f1 100%)",
+                color: "#fff",
+                fontWeight: 700,
+                fontSize: "1.1rem",
+                border: "none",
+                borderRadius: 8,
+                padding: "0.8em 2em",
+                marginTop: 12,
+              }}
+            >
+              Post Your Question
+            </button>
           </form>
         </div>
       </div>

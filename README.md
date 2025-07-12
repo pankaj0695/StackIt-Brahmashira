@@ -19,7 +19,7 @@ StackIt aims to solve the need for a minimal, structured, and collaborative Q&A 
 2. **Answering System**
    - Users can answer any public question
    - Rich text formatting supported
-   - Answers displayed in chronological or voted order
+   - Answers displayed in voted order
    - Only logged-in users can post answers
 3. **Voting & Answer Acceptance**
    - Upvote/downvote answers

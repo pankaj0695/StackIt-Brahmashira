@@ -26,6 +26,7 @@ interface UserContextType {
   }) => Promise<string>;
   login: (data: { email: string; password: string }) => Promise<string>;
   logout: () => Promise<void>;
+  updateProfile: (data: Partial<User>) => Promise<string>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -65,6 +66,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const result = await res.json();
     if (res.ok) {
       setUser(result.user);
+      if (result.token) localStorage.setItem("token", result.token);
       return "Registration successful!";
     } else {
       throw new Error(result.error || "Registration failed");
@@ -80,6 +82,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const result = await res.json();
     if (res.ok) {
       setUser(result.user);
+      if (result.token) localStorage.setItem("token", result.token);
       return "Login successful!";
     } else {
       throw new Error(result.error || "Login failed");
@@ -91,11 +94,35 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       method: "POST",
     });
     setUser(null);
+    localStorage.removeItem("token");
     navigate("/login");
   };
 
+  const updateProfile = async (data: Partial<User>) => {
+    if (!user) throw new Error("Not authenticated");
+    const token = localStorage.getItem("token");
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    const res = await fetch("http://localhost:4000/auth/updateprofile", {
+      method: "POST",
+      headers,
+      body: JSON.stringify(data),
+    });
+    const result = await res.json();
+    if (res.ok) {
+      setUser(result.user);
+      return "Profile updated successfully!";
+    } else {
+      throw new Error(result.error || "Profile update failed");
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ user, register, login, logout }}>
+    <UserContext.Provider
+      value={{ user, register, login, logout, updateProfile }}
+    >
       {children}
     </UserContext.Provider>
   );

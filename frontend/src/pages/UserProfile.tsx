@@ -1,40 +1,30 @@
-import React, { useState } from 'react';
-import './UserProfile.css';
+import React, { useState } from "react";
+import { useUser } from "../contexts/UserContext";
+import styles from "./UserProfile.module.css";
 
-interface User {
-  _id: string;
-  username: string;
-  email: string;
-  name: string;
-  role: 'user' | 'admin' | 'moderator';
-  bio?: string;
-  followers: number;
-  following: number;
-}
-
-interface UserProfileProps {
-  user: User;
-  onSave: (updatedUser: User) => void;
-}
-
-const UserProfile: React.FC<UserProfileProps> = ({ user, onSave }) => {
+const UserProfile: React.FC = () => {
+  const { user, updateProfile } = useUser();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedUser, setEditedUser] = useState<User>({ ...user });
+  const [editedUser, setEditedUser] = useState({ ...user });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setEditedUser(prev => ({ ...prev, [name]: value }));
+    setEditedUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = () => {
-    onSave(editedUser);
+    updateProfile(editedUser);
     setIsEditing(false);
   };
 
+  if (!user) return <div>Loading...</div>;
+
   return (
-    <div className="user-profile-container">
-      <div className="profile-header">
-        <div className="profile-identity">
+    <div className={styles["user-profile-container"]}>
+      <div className={styles["profile-header"]}>
+        <div className={styles["profile-identity"]}>
           {isEditing ? (
             <>
               <input
@@ -42,7 +32,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSave }) => {
                 name="name"
                 value={editedUser.name}
                 onChange={handleInputChange}
-                className="profile-edit-input"
+                className={styles["profile-edit-input"]}
                 placeholder="Full name"
               />
               <input
@@ -50,86 +40,92 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onSave }) => {
                 name="username"
                 value={editedUser.username}
                 onChange={handleInputChange}
-                className="profile-edit-input"
+                className={styles["profile-edit-input"]}
                 placeholder="Username"
               />
             </>
           ) : (
             <>
-              <h2 className="profile-name">{user.name}</h2>
-              <p className="profile-username">@{user.username}</p>
+              <h2 className={styles["profile-name"]}>{user.name}</h2>
+              <p className={styles["profile-username"]}>@{user.username}</p>
             </>
           )}
         </div>
 
-        <div className="profile-actions">
+        <div className={styles["profile-actions"]}>
           {isEditing ? (
-            <div className="edit-buttons">
-              <button className="cancel-btn" onClick={() => setIsEditing(false)}>
+            <div className={styles["edit-buttons"]}>
+              <button
+                className={styles["cancel-btn"]}
+                onClick={() => setIsEditing(false)}
+              >
                 Cancel
               </button>
-              <button className="save-btn" onClick={handleSave}>
+              <button className={styles["save-btn"]} onClick={handleSave}>
                 Save Profile
               </button>
             </div>
           ) : (
-            <button className="edit-btn" onClick={() => setIsEditing(true)}>
+            <button
+              className={styles["edit-btn"]}
+              onClick={() => setIsEditing(true)}
+            >
               Edit Profile
             </button>
           )}
         </div>
       </div>
 
-      <div className="profile-content">
-        <div className="profile-details">
-          <div className="detail-row">
-            <span className="detail-label">Email:</span>
+      <div className={styles["profile-content"]}>
+        <div className={styles["profile-details"]}>
+          <div className={styles["detail-row"]}>
+            <span className={styles["detail-label"]}>Email:</span>
             {isEditing ? (
               <input
                 type="email"
                 name="email"
                 value={editedUser.email}
                 onChange={handleInputChange}
-                className="profile-edit-input"
+                className={styles["profile-edit-input"]}
               />
             ) : (
-              <span className="detail-value">{user.email}</span>
+              <span className={styles["detail-value"]}>{user.email}</span>
             )}
           </div>
 
-          <div className="detail-row">
-            <span className="detail-label">Role:</span>
-            <span className={`role-badge ${user.role}`}>
+          <div className={styles["detail-row"]}>
+            <span className={styles["detail-label"]}>Role:</span>
+            <span className={`${styles["role-badge"]} ${user.role}`}>
               {user.role}
             </span>
           </div>
 
-          <div className="detail-row bio-row">
-            <span className="detail-label">Bio:</span>
+          <div className={`${styles["detail-row"]} ${styles["bio-row"]}`}>
+            <span className={styles["detail-label"]}>Bio:</span>
             {isEditing ? (
               <textarea
                 name="bio"
-                value={editedUser.bio || ''}
+                value={editedUser.bio || ""}
                 onChange={handleInputChange}
-                className="profile-edit-textarea"
+                className={styles["profile-edit-textarea"]}
                 placeholder="Tell others about yourself"
               />
             ) : (
-              <p className="detail-value bio-text">
-                {user.bio || 'No bio provided'}
+              <p className={`${styles["detail-value"]} ${styles["bio-text"]}`}>
+                {user.bio || "No bio provided"}
               </p>
             )}
           </div>
         </div>
 
-        <div className="profile-stats">
-          <div className="stat-box">
-            <span className="stat-number">{user.followers}</span>
-            <span className="stat-label">Followers</span>
+        <div className={styles["profile-stats"]}>
+          <div className={styles["stat-box"]}>
+            <span className={styles["stat-number"]}>{user.followers}</span>
+            <span className={styles["stat-label"]}>Followers</span>
           </div>
-          <div className="stat-box">
-            <span className="stat-number">{user.following}</span>
-            <span className="stat-label">Following</span>
+          <div className={styles["stat-box"]}>
+            <span className={styles["stat-number"]}>{user.following}</span>
+            <span className={styles["stat-label"]}>Following</span>
           </div>
         </div>
       </div>

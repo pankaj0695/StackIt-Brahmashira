@@ -49,7 +49,7 @@ exports.register = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: "User registered successfully", user: user });
+      .json({ message: "User registered successfully", user: user, token: token });
   } catch (err) {
     res
       .status(500)
@@ -91,7 +91,7 @@ exports.login = async (req, res) => {
       maxAge: 60 * 60 * 1000,
     });
 
-    res.status(200).json({ message: "Logged in successfully", user: user });
+    res.status(200).json({ message: "Logged in successfully", user: user, token: token });
   } catch (err) {
     res.status(500).json({ error: "Login failed", details: err.message });
   }
@@ -106,5 +106,41 @@ exports.logout = async (req, res) => {
     res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {
     res.status(500).json({ error: "Logout failed", details: err.message });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    // userId is set by auth middleware
+    const userId = req.user._id;
+    const { name, username, email, bio } = req.body;
+    // Only allow updating allowed fields
+    const updateFields = {};
+    if (name) updateFields.name = name;
+    if (username) updateFields.username = username;
+    if (email) updateFields.email = email;
+    if (bio !== undefined) updateFields.bio = bio;
+    // Check for username/email conflicts
+    if (username) {
+      const existing = await User.findOne({ username, _id: { $ne: userId } });
+      if (existing)
+        return res.status(400).json({ error: "Username already taken" });
+    }
+    if (email) {
+      const existing = await User.findOne({ email, _id: { $ne: userId } });
+      if (existing)
+        return res.status(400).json({ error: "Email already taken" });
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateFields },
+      { new: true }
+    );
+    if (!updatedUser) return res.status(404).json({ error: "User not found" });
+    res.status(200).json({ message: "Profile updated", user: updatedUser });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Profile update failed", details: err.message });
   }
 };

@@ -1,0 +1,206 @@
+.pageContainer {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 32px 0;
+  background: #0e2548;
+}
+
+.heading {
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.4em;
+  color: #f1e7e7;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  letter-spacing: 0.5px;
+}
+
+.subheading {
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 2em;
+  color: #f9f4f4;
+  font-weight: 500;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  letter-spacing: 0.2px;
+  font-weight: bold;
+}
+
+.cardGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.card {
+  background: #e8e8f2;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(230, 54, 54, 0.08);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;      /* Block width */
+  margin: 0 auto;        /* Center horizontally */
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 10 40px 16px rgba(28, 186, 113, 0.13);
+}
+
+.header {
+  display: flex;
+  color: #0a0a0a;
+  font-size: larger;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.likeBtn {
+  background: #101b64;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+}
+.likeBtn:hover {
+  background: #5286d2;
+}
+
+.description {
+  margin: 12px 0;
+  color: #050505;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 1.4rem;
+}
+
+.tags {
+  margin-bottom: 12px;
+}
+
+.tag {
+  background: #09af32;
+  color: #f4eded;
+  font-weight: bolder;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-right: 6px;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.answerSection {
+  display: flex;
+  gap: 8px;
+  height: fit-content;
+  margin-bottom: 14px;
+}
+
+.answerInput {
+  flex: 1;
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+.answerInput:focus {
+  border: 1.5px solid #4caf50;
+  outline: none;
+}
+
+.submitAnswerBtn {
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.submitAnswerBtn:disabled {
+  background: #b6e1bc;
+  cursor: not-allowed;
+}
+.submitAnswerBtn:not(:disabled):hover {
+  background: #388e3c;
+}
+
+.answersList {
+  margin-top: 8px;
+}
+
+.answerCard {
+  background: #f9f9f9;
+  border-radius: 6px;
+  color: #050505;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  padding: 8px 10px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.98rem;
+}
+
+.voteBtns {
+  display: flex;
+  
+  align-items: center;
+}
+
+.voteBtns button {
+  margin-left: 5px;
+  background: #7fc0ef;
+  border: none;
+  color: #050505;
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+}
+.voteBtns button:hover {
+  background: #bbdefb;
+}
+
+@media (max-width: 600px) {
+  .heading {
+    font-size: 1.45rem;
+  }
+  .subheading {
+    font-size: 1rem;
+  }
+  .card {
+    max-width: 98vw;
+    padding: 14px 4vw;
+  }
+}
+.answerInput {
+  min-height: 80px;
+  color: #050505;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.answerSection .ql-toolbar {
+  border-radius: 5px 5px 0 0;
+}
+.answerSection .ql-container {
+  border-radius: 3px 3px 5px 5px;
+  min-height: 80px;
+}

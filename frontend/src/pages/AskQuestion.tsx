@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import styles from "./AskQuestion.module.css";
+import { useUser } from "../contexts/UserContext";
 
 const suggestedTags = ["react", "css", "help", "typescript", "html", "node.js"];
 
@@ -22,6 +23,9 @@ const AskQuestion: React.FC = () => {
   const [details, setDetails] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string>("");
+  const { user } = useUser();
 
   const addTag = (tag: string) => {
     if (tag && !tags.includes(tag) && tags.length < 5) {
@@ -34,13 +38,40 @@ const AskQuestion: React.FC = () => {
     setTags(tags.filter((t) => t !== tag));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission (e.g., send data to backend)
-    setTitle("");
-    setDetails("");
-    setTags([]);
-    setTagInput("");
+    setLoading(true);
+    setMessage("");
+    try {
+      if (!user) throw new Error("You must be logged in to ask a question.");
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:4000/questions/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          title,
+          description: details,
+          tags,
+        }),
+      });
+      const result = await res.json();
+      if (res.ok) {
+        setTitle("");
+        setDetails("");
+        setTags([]);
+        setTagInput("");
+        setMessage("Question posted successfully!");
+      } else {
+        setMessage(result.message || result.error || "Failed to post question");
+      }
+    } catch (err: any) {
+      setMessage(err.message || "Failed to post question");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -170,10 +201,24 @@ const AskQuestion: React.FC = () => {
                 borderRadius: 8,
                 padding: "0.8em 2em",
                 marginTop: 12,
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? "not-allowed" : "pointer",
               }}
+              disabled={loading}
             >
-              Post Your Question
+              {loading ? "Posting..." : "Post Your Question"}
             </button>
+            {message && (
+              <div
+                style={{
+                  color: message.includes("success") ? "#22c55e" : "#ef4444",
+                  marginTop: 10,
+                  fontWeight: 600,
+                }}
+              >
+                {message}
+              </div>
+            )}
           </form>
         </div>
       </div>
